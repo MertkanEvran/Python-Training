@@ -3,6 +3,12 @@ import random
 # Define symbols that player and npc can select
 MOVES = ["Rock","Scissor","Paper"]
 
+win_conditions = {
+    "Rock":{"Win":"Scissor","Lose":"Paper"},
+    "Scissor":{"Win":"Paper","Lose":"Rock"},
+    "Paper":{"Win":"Rock","Lose":"Scissor"}
+}
+
 # Creating a npc class to control the computer's moves
 class Computer():
 
@@ -62,24 +68,14 @@ class Game():
 
     # Checks who win 
     def determine_winner(self,player_choice,computer_choice):
-        if player_choice == "Paper" and computer_choice == MOVES[2]:
+        if player_choice in win_conditions[computer_choice]["Win"]:
+            self.game_over("Computer")
+        elif player_choice in win_conditions[computer_choice]["Lose"]:
+            self.game_over("Player")
+        else:
             self.start_round()
-        elif player_choice == "Paper" and computer_choice == MOVES[1]:
-            self.game_over("NPC")
-        elif player_choice == "Paper" and computer_choice == MOVES[0]:
-            self.game_over("PLAYER")
-        elif player_choice == "Rock" and computer_choice == MOVES[2]:
-            self.game_over("NPC")
-        elif player_choice == "Rock" and computer_choice == MOVES[1]:
-            self.game_over("PLAYER")
-        elif player_choice == "Rock" and computer_choice == MOVES[0]:
-            self.start_round()
-        elif player_choice == "Scissor" and computer_choice == MOVES[2]:
-            self.game_over("PLAYER")
-        elif player_choice == "Scissor" and computer_choice == MOVES[1]:
-            self.start_round()
-        elif player_choice == "Scissor" and computer_choice == MOVES[0]:
-            self.game_over("NPC")
+
+
     # Finised game and announce the winner. Ask for another round.
     def game_over(self,winner):
         print(f"{winner} win the game. Do you want to play again ? (y/n)")
