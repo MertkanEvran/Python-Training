@@ -1,15 +1,15 @@
 import random
 
-# Define symbols that player and npc can select
-MOVES = ["Rock","Scissor","Paper"]
+# Define moves that player and computer can select
+MOVES = ["rock","scissor","paper"]
 
 win_conditions = {
-    "Rock":{"Win":"Scissor","Lose":"Paper"},
-    "Scissor":{"Win":"Paper","Lose":"Rock"},
-    "Paper":{"Win":"Rock","Lose":"Scissor"}
+    "rock":{"Win":"Scissor","Lose":"Paper"},
+    "scissor":{"Win":"Paper","Lose":"Rock"},
+    "paper":{"Win":"Rock","Lose":"Scissor"}
 }
 
-# Creating a npc class to control the computer's moves
+# Creating a computer class to control the computer's moves
 class Computer():
 
     def __init__(self) -> None:
@@ -20,7 +20,7 @@ class Computer():
         print(f"Npc selected {computer_choice}")
         return computer_choice
     
-# Creating a player class to control the user's moves
+# Creating a player class to control the players's moves
 class Player():
 
     def __init__(self) -> None:
@@ -30,9 +30,12 @@ class Player():
         print("List of moves you can select.")
         for m in MOVES:
             print("-" + m)
-        choice = input("Please select your move: ")
-        print(f"You selected {choice}")
-        return choice
+        choice = input("Please select your move: ").lower()
+        if choice not in MOVES:
+            raise Exception("Please type your choice correctly.")
+        else:
+            print(f"You selected {choice}")
+            return choice
 
 # Creating the game class to handle the game's flow
 class Game():
@@ -48,10 +51,11 @@ class Game():
         self.current_round = 1
         self.display_rules()
         self.start_round()
+        
 
     # Display the game's rules to player before game
     def display_rules(self):
-        print("Welcome to game. You should write your answer properly.")
+        print("Welcome to game. You should write your answer correctly.")
         print("Start with upper case in your answer.")
         print("Paper wins against Rock.")
         print("Rock wins against Scissor.")
@@ -62,16 +66,28 @@ class Game():
 
         print(f"{self.current_round}. round is started".center(100,"-"))
         self.current_round +=1
-        player_choice = self.player.select_move()
-        computer_choice = self.computer.select_move()
+        while True:
+            try:
+                player_choice = self.player.select_move()
+            except Exception as ex:
+                print(ex)
+            else:
+                break
+        computer_choice = self.computer.select_move().lower()
         self.determine_winner(player_choice,computer_choice)
 
     # Checks who win 
     def determine_winner(self,player_choice,computer_choice):
-        if player_choice in win_conditions[computer_choice]["Win"]:
-            self.game_over("Computer")
-        elif player_choice in win_conditions[computer_choice]["Lose"]:
-            self.game_over("Player")
+        if player_choice in (win_conditions[computer_choice]["Win"]).lower():
+            try:
+                self.game_over("Computer")
+            except Exception as ex:
+                print(ex)
+        elif player_choice in (win_conditions[computer_choice]["Lose"]).lower():
+            try:
+                self.game_over("Player")
+            except Exception as ex:
+                print(ex)
         else:
             self.start_round()
 
@@ -88,7 +104,7 @@ class Game():
                 print("Game is finished. Thanks for playing.")
                 break
             else:
-                print("You typed a wrong input. Please try again.\n")
+                raise Exception("You typed a wrong input.")
 # Create a game instant and start the game.
 game = Game()
 game.start_game()
