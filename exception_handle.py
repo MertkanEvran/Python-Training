@@ -52,19 +52,35 @@ while True:
 #4 : Create a factorial method . If that method takes any wrong input, then give a error message to user
 
 '''
-def find_fact(number):
-    result = 1
-    for x in range(1,number+1): 
-        result = result * x
-    return result
+
+def fact(number):
+
+    def check_input(number):
+        try:
+            number = int(number)
+            if (number < 1):
+                raise Exception("Please enter a value that grater than 1")
+            else:
+                return find_fact(number)
+        except:
+            print("Please enter a numerical value")
+            return
+            
+
+    def find_fact(number):    
+        if number == 1:
+            return 1
+        else:
+            return number * find_fact(number-1)
+    
+    return check_input(number)
 
 while True:
-    answer = input("Please enter a number: ")
-    try:
-        number = int(answer)
-        result=find_fact(number)
-        print(result)
-    except Exception as ex:
-        print(ex)
+        answer = input("Please enter a number, or 'q' to quit: ")
+        if answer.lower() == 'q':
+            break
+        result = fact(answer)
+        if result is not None:
+            print(f"{answer}! = {result}")
     
 '''
