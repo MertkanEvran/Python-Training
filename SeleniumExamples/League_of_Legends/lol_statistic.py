@@ -12,7 +12,7 @@ class Summoner:
         self.url = f"https://www.leagueofgraphs.com/{self.region}/summoner/{self.region}/{self.username}"
         self.browser = webdriver.Chrome()
 
-    def summoner_dict(self):
+    def get_summoner_info(self):
         self.browser.get(self.url)
         self.browser.maximize_window()
         time.sleep(2)
@@ -41,13 +41,28 @@ class Summoner:
             counter = counter + 1
         return summoner
     
-    def display_summoner():
-        pass
+    def display_summoner(self):
+        infos = self.get_summoner_info()
+        print("Nick: " + infos["nick"] +
+            "\nLevel: " + infos["level"] +
+            "\nPlayed Game: " + infos["played_game"] +
+            "\nWin Rate: " + infos["win_rate"] +
+            "\n--Soloq--" +
+            "\n    Wins: " + infos["soloq"]["wins"] +
+            "\n    Loses: " + infos["soloq"]["loses"] +
+            "\n    Rank: " + infos["soloq"]["rank"] +
+            "\n    Lp: " + infos["soloq"]["lp"] +
+            "\n--Flex--" +
+            "\n    Wins: " + infos["flex"]["wins"] +
+            "\n    Loses: " + infos["flex"]["loses"] +
+            "\n    Rank: " + infos["flex"]["rank"] +
+            "\n    Lp: " + infos["flex"]["lp"]
+            )
 
-
-summoner = Summoner("Senkami","tr")
-summoner_infos = summoner.summoner_dict()
-print(summoner_infos)
+nick = input("Please input your nick: ")
+region = input("Please input your region: ")
+summoner = Summoner(nick, region)
+summoner.display_summoner()
 
 
 
